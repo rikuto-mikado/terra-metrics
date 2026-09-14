@@ -1,0 +1,45 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "${BACKEND_PORT:-3000}:3000"
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    env_file:
+      - .env
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  edge:
+    build:
+      context: ./edge
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      # Docker network override: uses service name 'backend' instead of localhost
+      - API_URL=http://backend:3000/api/metrics
+    volumes:
+      - ./edge:/app
+    depends_on:
+      - backend
+    restart: unless-stopped

@@ -1,0 +1,15 @@
+{
+  "name": "terra-metrics",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n \"BACKEND,FRONTEND,EDGE\" -c \"blue.bold,green.bold,yellow.bold\" \"npm run dev:backend\" \"npm run dev:frontend\" \"npm run dev:edge\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "dev:edge": "cd edge && .venv/bin/python -u main.py",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.4"
+  }
+}
