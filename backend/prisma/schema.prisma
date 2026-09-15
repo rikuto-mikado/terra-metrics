@@ -1,0 +1,19 @@
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    }
+    generator client {
+        provider = "prisma-client-js"
+    }
+    model Metric {
+        id            Int      @id @default(autoincrement())
+        temperature   Float
+        humidity      Float
+        soilMoisture  Float    @map("soil_moisture")
+        vpd           Float?
+        timeSlot      String?  @map("time_slot")
+        capturedAt    DateTime @default(now()) @map("captured_at")
+        
+        @@index([capturedAt])
+        @@map("metrics")
+    }
