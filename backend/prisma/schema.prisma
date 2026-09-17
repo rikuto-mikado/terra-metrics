@@ -1,19 +1,21 @@
 datasource db {
-    provider = "postgresql"
-    url      = env("DATABASE_URL")
-    }
-    generator client {
-        provider = "prisma-client-js"
-    }
-    model Metric {
-        id            Int      @id @default(autoincrement())
-        temperature   Float
-        humidity      Float
-        soilMoisture  Float    @map("soil_moisture")
-        vpd           Float?
-        timeSlot      String?  @map("time_slot")
-        capturedAt    DateTime @default(now()) @map("captured_at")
-        
-        @@index([capturedAt])
-        @@map("metrics")
-    }
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Metric {
+  id           Int      @id @default(autoincrement())
+  temperature  Float    // Temperature (℃)
+  humidity     Float    // Humidity (%)
+  soilMoisture Float    @map("soil_moisture") // Soil moisture (%)
+  vpd          Float?   // Saturation vapor pressure deficit (kPa)
+  timeSlot     String?  @map("time_slot")     // "morning" | "afternoon" | "night"
+  capturedAt   DateTime @default(now()) @map("captured_at") // Measurement datetime
+
+  @@index([capturedAt])
+  @@map("metrics")
+}
